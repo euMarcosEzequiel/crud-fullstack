@@ -35,14 +35,14 @@ class UserServices {
 
     async createUser({name, email} : UserServicesProps){
         try {
-            await prismaClient.user.create({
+            const user = await prismaClient.user.create({
                 data: {
                     name, 
                     email, 
                     status: true,
                 }
             });
-            return { message: "User registered successfully!"};
+            return { message: "User registered successfully!", user};
 
         } catch (error: any) {
             throw Error("Error creating user! " + error);

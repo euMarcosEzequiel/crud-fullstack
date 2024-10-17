@@ -19,7 +19,9 @@ class UserServices{
                 name: name,
                 email: email,
             });
+
             toast.success(response.data.message);
+            return response.data.user;
 
         } catch (error) {
             console.log(error);
