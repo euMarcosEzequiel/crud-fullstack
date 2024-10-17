@@ -10,106 +10,79 @@ interface UserServicesProps{
 }
 
 class UserServices {
-    
     async findAllUsers(){
         try {
             const users = await prismaClient.user.findMany();
             return users;   
         } catch (error) {
-            throw new Error("Error finding all users! \n" + error);
+            throw new Error("Error finding all users! " + error);
         }
     }
 
-    async findUser(idUser: string){
+    private async findUser(idUser: string){
         try {
-            if(idUser){
-                const user = await prismaClient.user.findFirst({
-                    where: {
-                        id: idUser,
-                    }
-                });
+            const user = await prismaClient.user.findFirst({
+                where: {
+                    id: idUser,
+                }
+            });
+            return user;
 
-                return user;
-            }
-            else{
-                throw new Error("Error finding user, enter an ID!");
-            }
         } catch (error: any) {
-            throw Error(error);
+            throw new Error("Error finding user! " + error);
         }
     }
 
     async createUser({name, email} : UserServicesProps){
         try {
-            if(name && email){
-                const user = await prismaClient.user.create({
-                    data: {
-                        name, 
-                        email, 
-                        status: true,
-                    }
-                });
-    
-                return user;
-            }
-            else{
-                throw new Error("Error registering new user!, fill in all fields!");
-            }
+            await prismaClient.user.create({
+                data: {
+                    name, 
+                    email, 
+                    status: true,
+                }
+            });
+            return { message: "User registered successfully!"};
+
         } catch (error: any) {
-            throw Error(error);
+            throw Error("Error creating user! " + error);
         }
     }
 
     async updateUser(idUser: string, {name, email, status} : UserServicesProps){
         try {
-            if(idUser){
-                const user = await this.findUser(idUser);
+            const user = await this.findUser(idUser);
+            await prismaClient.user.update({
+                where: {
+                    id: user?.id,
+                },
+                data: {
+                    name: name,
+                    email: email,
+                    status: status,
+                    updated_at: new Date()
+                }
+            });
+            return { message: "User updated successfully! "};
 
-                if(name && email && status){
-                    const userUpdate = await prismaClient.user.update({
-                        where: {
-                            id: user?.id,
-                        },
-                        data: {
-                            name: name,
-                            email: email,
-                            status: status,
-                            updated_at: new Date()
-                        }
-                    });
-    
-                    return userUpdate;
-                }
-                else{
-                    throw new Error("Error updating new user!, fill in all fields!");
-                }
-            }
-            else{
-                throw new Error("Error updating user, enter an ID!");
-            }
         } catch (error: any) {
-            throw Error(error);
+            throw Error("Error updating user!" + error);
         }
     }
 
     async deleteUser(idUser: string){
         try {
-            if(idUser){
-                const user = await this.findUser(idUser);
+            const user = await this.findUser(idUser);
                 
-                await prismaClient.user.delete({
-                    where: {
-                        id: user?.id,
-                    }
-                });
-
-                return { message: "User successfully deleted" };
-            }
-            else{
-                throw new Error("Error deleting user, enter an ID!");
-            }
+            await prismaClient.user.delete({
+                where: {
+                    id: user?.id,
+                }
+            });
+            return { message: "User deleted successfully!" };
+            
         } catch (error: any) {
-            throw Error(error)
+            throw Error("Error when deleting user! " + error);
         }
     }
 }
