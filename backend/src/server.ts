@@ -8,8 +8,11 @@ app.setErrorHandler((error, request, reply) => {
     reply.code(400).send({ message: error.message });
 });
 
-const start = async () => {
+app.get("/", (request, reply) => {
+    reply.code(200).send({ message: "Hello world!" });
+});
 
+const start = async () => {
     await app.register(cors);
     await app.register(usersRoute);
 

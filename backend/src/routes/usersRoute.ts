@@ -5,7 +5,6 @@ import {
     FastifyReply,
 } from "fastify";
 import { UserController } from "../controllers/UserController";
-import { request } from "http";
 
 const userController = new UserController();
 
@@ -15,9 +14,9 @@ async function usersRoute(fastify: FastifyInstance, options: FastifyPluginOption
         return userController.getUsers(request, reply);
     });
 
-    fastify.get("/user", async (request: FastifyRequest, reply: FastifyReply) => {
-        return userController.getUser(request, reply);
-    });
+    // fastify.get("/user", async (request: FastifyRequest, reply: FastifyReply) => {
+    //     return userController.getUser(request, reply);
+    // });
 
     fastify.post("/user", async (request: FastifyRequest, reply: FastifyReply) => {
         return userController.create(request, reply);
