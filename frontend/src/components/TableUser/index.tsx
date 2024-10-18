@@ -1,3 +1,4 @@
+import React from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,12 +12,19 @@ import Divider from "@mui/material/Divider";
 import { useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useAppSelector } from '@/hooks/hooks';
-import { dispatch } from '@/store';
-import { UserServices } from '@/services/UserServices';
-import { getAllUsers, deleteUser } from '@/slices/User/user-slice';
+import { useAppSelector } from '../../hooks/hooks';
+import { dispatch } from '../../store';
+import { UserServices } from '../../services/UserServices';
+import { getAllUsers, deleteUser } from '../../slices/User/user-slice';
+import { styled } from '@mui/material';
 
 const userServices = new UserServices();
+
+const Button = styled("button")(() => ({
+  display: "flex",
+  background: "transparent",
+  border: "none",
+}));
 
 export function TableUser() {
   const users = useAppSelector((state) => state.user.users);
@@ -93,12 +101,12 @@ export function TableUser() {
                       { user.status ? "Ativo" : "Inativo" }
                     </TableCell>
                     <TableCell style={{ display: "flex", gap: "0.8rem"}}>
-                      <button>
+                      <Button>
                         <EditIcon />
-                      </button>
-                      <button onClick={ () => handleDeleteUser(user.id) }>
+                      </Button>
+                      <Button onClick={ () => handleDeleteUser(user.id) }>
                         <DeleteForeverIcon />
-                      </button>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

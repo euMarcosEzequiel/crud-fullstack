@@ -1,6 +1,7 @@
-import { UserServices } from "@/services/UserServices";
-import { newUser } from "@/slices/User/user-slice";
-import { dispatch } from "@/store";
+import React from "react";
+import { UserServices } from "../../services/UserServices";
+import { newUser } from "../../slices/User/user-slice";
+import { dispatch } from "../../store";
 import { FormEvent, useRef } from "react";
 
 const userServices = new UserServices();
@@ -19,7 +20,7 @@ export function Form() {
     }
 
     return(
-        <form onSubmit={handleSubmitForm} className="bg-neutral-400 flex flex-col mb-4">
+        <form onSubmit={handleSubmitForm}>
             <input type="text" ref={nameRef} placeholder="Name" />
             <input type="text" ref={emailRef} placeholder="Email" />
             

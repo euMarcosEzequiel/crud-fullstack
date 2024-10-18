@@ -1,5 +1,6 @@
-import { store } from "@/store";
-import "@/styles/globals.css";
+import React from "react";
+import { store } from "../store";
+import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";

@@ -1,4 +1,4 @@
-
+import React from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -14,7 +14,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useState } from 'react';
 import { Drawer, DrawerHeader } from "./styles";
 import Link from 'next/link';
-
 
 export function Sidebar() {
   const [drawerVisibility, setDrawerVisibility] = useState(true);
