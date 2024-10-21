@@ -11,7 +11,7 @@ interface UserState{
     users: User[],
 }
 
-const initialState : UserState = {
+const initialState: UserState = {
     users: [],
 }
 
@@ -30,6 +30,7 @@ export const userSlice = createSlice({
         }
     }
 });
+
 
 
 export const { getAllUsers, newUser, deleteUser } = userSlice.actions;
