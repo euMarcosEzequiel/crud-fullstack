@@ -16,7 +16,7 @@ import { useAppSelector } from '../../hooks/hooks';
 import { dispatch } from '../../store';
 import { UserServices } from '../../services/UserServices';
 import { getAllUsers, deleteUser } from '../../slices/User/user-slice';
-import { styled } from '@mui/material';
+import { Box, styled, TextField } from '@mui/material';
 
 const userServices = new UserServices();
 
@@ -24,15 +24,17 @@ const Button = styled("button")(() => ({
   display: "flex",
   background: "transparent",
   border: "none",
+  cursor: "pointer",
 }));
 
 export function TableUser() {
   const users = useAppSelector((state) => state.user.users);
-  
+  const [searchUsers, setSearchUsers] = useState("");
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  async function getUsers() {
+  const getUsers = async () => {
     const response = await userServices.getUsers();
     dispatch(getAllUsers(response));
   }
@@ -42,10 +44,14 @@ export function TableUser() {
   }, []);
 
   
-  async function handleDeleteUser(id: string){
+  const handleDeleteUser = async (id: string) => {
     await userServices.delete(id);
     dispatch(deleteUser(id));
-  }
+  };
+
+  const handleSearchUsers = (event:  React.ChangeEvent<HTMLInputElement>) => {
+    setSearchUsers(event.target.value);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -66,6 +72,9 @@ export function TableUser() {
       >
         Users List
       </Typography>
+      <Box sx={{padding: "0px 15px" ,  marginBottom: "20px"}}>
+        <TextField sx={{ width: "100%"}} id="outlined-basic" label="Filter by name" variant="outlined" onChange={handleSearchUsers} />
+      </Box>
       <Divider />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -88,6 +97,9 @@ export function TableUser() {
           <TableBody>
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .filter((user) => {
+                return searchUsers.toLowerCase() === "" ? user : user.name.toLowerCase().includes(searchUsers);
+              })
               .map((user) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={user.id}>
